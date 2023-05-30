@@ -33,3 +33,14 @@ body {
   font-size: 16px;
   line-height: 1;
 }
+
+li, a, link, link:hover , a:hover {
+  text-decoration: none;
+  list-style: none;
+  color: inherit;
+}
+
+footer{
+  background-color: var(--primary-color);
+  color: var(--text-mode-white)
+}
