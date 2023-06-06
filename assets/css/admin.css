@@ -1,0 +1,48 @@
+@import url("./_Common.css");
+table {
+  color: white !important;
+  text-align: center;
+  border: 1px solid red;
+}
+table th {
+  background-color: var(--primary-color);
+}
+
+tbody tr,
+td,
+th {
+  border-bottom: 1px solid var(--primary-color);
+  padding: 20px;
+}
+
+table button {
+  width: 100%;
+}
+
+body {
+  background-image: url("../img/NETFLIX_FORM_02_wes.jpg");
+  background-size: 100%;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+.add{
+    display: flex;
+    justify-content: flex-end;
+    padding: 30px 0;
+}
+
+.modal-content{
+    padding: 20px;
+    background-color: var(--primary-bg-color);
+    color: white;
+}
+
+.modal-header, .modal-footer{
+    color: var(--primary-color);
+    border: none;
+}
+
+input{
+}
