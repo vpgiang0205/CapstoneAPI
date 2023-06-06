@@ -232,7 +232,7 @@
                 <button type="button" class="btn btn-dark" data-dismiss="modal">
                   Close
                 </button>
-                <button type="button" class="btn btn-danger">Add</button>
+                <button type="submit" onclick="productAdd()" class="btn btn-danger">Add</button>
               </div>
             </div>
           </div>
@@ -240,13 +240,7 @@
       </section>
     </main>
 
-    <script>
-      $("#exampleModal").on("show.bs.modal", (event) => {
-        var button = $(event.relatedTarget);
-        var modal = $(this);
-        // Use above variables to manipulate the DOM
-      });
-    </script>
+  
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <footer class="text-center text-lg-start gradient-custom">
