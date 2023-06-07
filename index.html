@@ -18,31 +18,39 @@
     />
 
     <link rel="stylesheet" href="./assets/css/landingpage.css" />
+    <style>
+      /* Custom CSS for responsiveness */
+    </style>
   </head>
   <body>
     <div class="container">
-      <div class="p-5 d-flex flex-wrap justify-content-around center">
+      <div class="d-flex flex-nowrap justify-content-around center">
         <!-- Admin -->
-        <a href="./admin/view/index.html"
-          ><div class="card text-left">
-            <img class="img-fluid" src="./assets/img/admin.png" alt="" />
-            <div class="card-body">
-              <h4 class="card-title text-center">Admin</h4>
+        <div class="col-md-6 col-lg-4 col-sm-6 ">
+          <a href="./admin/view/index.html" class="">
+            <div class="card">
+              <img class="card-img-top" src="./assets/img/admin.png" alt="" />
+              <div class="card-body">
+              </div>
             </div>
-          </div>
-        </a>
+            <h4 class="card-title text-center">Admin</h4>
+          </a>
+        </div>
 
         <!-- Store -->
-        <a href="./customer/view/index.html"
-          ><div class="card text-left">
-            <img class="img-fluid" src="./assets/img/store.png" alt="" />
-            <div class="card-body">
-              <h4 class="card-title text-center">Store</h4>
+        <div class="col-md-6 col-lg-4 col-sm-6" >
+          <a href="./customer/view/index.html" class="">
+            <div class="card">
+              <img class="card-img-top" src="./assets/img/store.png" alt="" />
+              <div class="card-body">
+              </div>
             </div>
-          </div>
-        </a>
+            <h4 class="card-title text-center">Store</h4>
+          </a>
+        </div>
       </div>
     </div>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script

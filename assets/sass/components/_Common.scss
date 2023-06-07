@@ -1,6 +1,7 @@
 /* Common: định dạng cho các phần cả 2 trang dùng chung */
-@import url("./_Variables.css");
-@import url("./_Reset.css");
+@use "./_Variables.scss";
+@use "./_Reset.scss";
+@use "./_Responsive.scss";
 
 body {
   background-color: var(--primary-bg-color);

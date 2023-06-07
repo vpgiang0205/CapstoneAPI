@@ -1,8 +1,44 @@
-@import url("./_Common.css");
+@charset "UTF-8";
+/* Common: định dạng cho các phần cả 2 trang dùng chung */
+@import url("./_Variables.css");
+@import url("./_Reset.css");
+body {
+  background-color: var(--primary-bg-color);
+}
+
+section {
+  margin-top: 15rem;
+}
+
+.navbar {
+  padding: 30px;
+  background-color: var(--primary-color);
+}
+
+.navbar-nav i {
+  margin-bottom: 0.9rem;
+}
+
+button {
+  cursor: pointer;
+  background-color: var(--primary-color);
+  border-radius: 10px;
+  color: var(--text-mode-white);
+}
+
+footer {
+  background-color: var(--primary-bg-color);
+  color: var(--text-mode-white);
+}
+
+header {
+  width: 90%;
+  margin: auto;
+}
 
 .banner-image {
   background-image: url("https://cdn.i-scmp.com/sites/default/files/d8/images/2020/04/16/apple_new-iphone-se-black-camera-and-touch-id_04152020.jpg");
   background-repeat: no-repeat;
   height: 100vh;
   background-position: center;
-}
+}/*# sourceMappingURL=customer.css.map */

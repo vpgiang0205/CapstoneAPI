@@ -1,0 +1,47 @@
+/* LandingPage */
+@use '../sass/components/_Common';
+
+body {
+    background-image: url("../img/SPECTURM.gif");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: 150%;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    background-size: cover;
+    color: white;
+}
+
+img {
+    max-width: 100%;
+    height: 250px;
+    background-color: var(--primary-bg-color);
+    transition: all 0.5s ease;
+}
+
+.center {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card {
+    padding: 10px;
+    background-color: var(--primary-bg-color) !important;
+    color: white !important;
+    transition: all 0.5s ease;
+}
+
+a:hover,
+a:hover .card,
+a:hover img {
+    color: red;
+    background-color: var(--primary-color) !important;
+}
+
+h4 {
+    margin-top: 1rem;
+    transition: all 0.5s ease;
+}
