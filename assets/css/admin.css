@@ -59,15 +59,15 @@ li, a, link, link:hover, a:hover {
 /* tablet: 740<= width < 1024 */
 /* moblie: width < 740px */
 @media screen and (max-width: 739px) {
-  .card {
+  #landingpage .card {
     margin: auto;
     width: 7rem;
     height: 7rem;
   }
-  .card h4 {
+  #landingpage .card h4 {
     font-size: 16px;
   }
-  .card img {
+  #landingpage .card img {
     margin: auto;
     height: 7rem;
   }
@@ -79,11 +79,6 @@ body {
 
 section {
   margin-top: 15rem;
-}
-
-.navbar {
-  padding: 30px;
-  background-color: var(--primary-color);
 }
 
 .navbar-nav i {
@@ -100,11 +95,6 @@ button {
 footer {
   background-color: var(--primary-bg-color);
   color: var(--text-mode-white);
-}
-
-header {
-  width: 90%;
-  margin: auto;
 }
 
 table {

@@ -1,18 +1,84 @@
 @charset "UTF-8";
+:root {
+  --primary-color: red;
+  --secondary-color: #141414;
+  --primary-bg-color:#141414;
+  --text-mode-white: white;
+  --text-mode-black: black;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+select,
+textarea {
+  background-color: transparent;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  background-color: transparent;
+  outline: none;
+  border: 0;
+}
+
+body {
+  min-height: 100vh;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1;
+}
+
+li, a, link, link:hover, a:hover {
+  text-decoration: none;
+  list-style: none;
+  color: inherit;
+}
+
+/* RESPONSIVE */
+/*  pc: width >= 1024px */
+/* tablet: 740<= width < 1024 */
+/* moblie: width < 740px */
+@media screen and (max-width: 739px) {
+  #landingpage .card {
+    margin: auto;
+    width: 7rem;
+    height: 7rem;
+  }
+  #landingpage .card h4 {
+    font-size: 16px;
+  }
+  #landingpage .card img {
+    margin: auto;
+    height: 7rem;
+  }
+}
 /* Common: định dạng cho các phần cả 2 trang dùng chung */
-@import url("./_Variables.css");
-@import url("./_Reset.css");
 body {
   background-color: var(--primary-bg-color);
 }
 
 section {
   margin-top: 15rem;
-}
-
-.navbar {
-  padding: 30px;
-  background-color: var(--primary-color);
 }
 
 .navbar-nav i {
@@ -31,14 +97,9 @@ footer {
   color: var(--text-mode-white);
 }
 
-header {
-  width: 90%;
-  margin: auto;
-}
-
-.banner-image {
+body {
   background-image: url("https://cdn.i-scmp.com/sites/default/files/d8/images/2020/04/16/apple_new-iphone-se-black-camera-and-touch-id_04152020.jpg");
   background-repeat: no-repeat;
-  height: 100vh;
   background-position: center;
+  background-size: cover;
 }/*# sourceMappingURL=customer.css.map */

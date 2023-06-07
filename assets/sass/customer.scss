@@ -1,8 +1,11 @@
-@use "../css/_Common.css";
+@use "../sass/components/_Common";
 
-.banner-image {
+body {
     background-image: url("https://cdn.i-scmp.com/sites/default/files/d8/images/2020/04/16/apple_new-iphone-se-black-camera-and-touch-id_04152020.jpg");
     background-repeat: no-repeat;
-    height: 100vh;
     background-position: center;
+    background-size: cover;
+}
+
+#products{
 }
