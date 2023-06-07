@@ -7,5 +7,81 @@ body {
     background-size: cover;
 }
 
-#products{
+.card {
+    background-color: var(--primary-bg-color);
+    color: var(--text-mode-white);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        transform: scale(1.1);
+
+        &::after {
+            opacity: 30%;
+        }
+
+
+    }
+
+    &::after {
+        content: "";
+        z-index: 1;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background-color: var(--primary-bg-color);
+        opacity: 0;
+        transition: all 0.2 ease;
+    }
+}
+
+.card__Overlay {
+    position: absolute;
+    padding: 3rem;
+    height: 100%;
+    width: 100%;
+    z-index: 12;
+    opacity: 0;
+    color: var(--text-mode-white);
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    &Footer {
+        transition: all 0.25s ease;
+
+        button {
+            padding: 15px 30px;
+        }
+    }
+
+    &Header {
+        font-size: 200%;
+    }
+
+    &Body {
+        position: absolute;
+        top: 20%;
+        transition: all 0.25s ease;
+    }
+
+    &:hover {
+        opacity: 1;
+
+        .card__Overlay {
+            &Body {
+                transform: translateY(30px);
+            }
+
+            &footer {
+                transform: translateY(-30px);
+            }
+
+        }
+    }
+
+
 }

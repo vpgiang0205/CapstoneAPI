@@ -77,7 +77,7 @@ var renderProduct = () => {
         <td>${product.id}</td>
         <td>${product.name}</td>
         <td>${product.price}</td>
-        <td>${product.img}</td>
+        <td> <img src = "${product.img}"></td>
         <td>${product.desc}</td>
         <td>
         <button class = "btn btn-danger" data-toggle="modal" data-target="#modelId" value ="${product.id}">Edit</button>

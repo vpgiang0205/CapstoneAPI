@@ -102,4 +102,66 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+}
+
+.card {
+  background-color: var(--primary-bg-color);
+  color: var(--text-mode-white);
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.card:hover {
+  transform: scale(1.1);
+}
+.card:hover::after {
+  opacity: 30%;
+}
+.card::after {
+  content: "";
+  z-index: 1;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: var(--primary-bg-color);
+  opacity: 0;
+  transition: all 0.2 ease;
+}
+
+.card__Overlay {
+  position: absolute;
+  padding: 3rem;
+  height: 100%;
+  width: 100%;
+  z-index: 12;
+  opacity: 0;
+  color: var(--text-mode-white);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.card__OverlayFooter {
+  transition: all 0.25s ease;
+}
+.card__OverlayFooter button {
+  padding: 15px 30px;
+}
+.card__OverlayHeader {
+  font-size: 200%;
+}
+.card__OverlayBody {
+  position: absolute;
+  top: 20%;
+  transition: all 0.25s ease;
+}
+.card__Overlay:hover {
+  opacity: 1;
+}
+.card__Overlay:hover .card__OverlayBody {
+  transform: translateY(30px);
+}
+.card__Overlay:hover .card__Overlayfooter {
+  transform: translateY(-30px);
 }/*# sourceMappingURL=customer.css.map */
