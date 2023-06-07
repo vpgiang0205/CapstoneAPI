@@ -1,22 +1,13 @@
 
 var productArr = []
-function fetchData() {
-    return axios.get('https://64709e4f3de51400f724a111.mockapi.io/product')
-        .then((response) => {
-            productArr = response.data;
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-}
 
 // GetEle:
 function getEle(id) {
     return document.getElementById(id)
 }
 
-// Add
-function productAdd() {
+// Get user input
+function getUserInput() {
     var name = getEle('name').value;
     var price = getEle('price').value;
     var screen = getEle('screen').value;
@@ -27,21 +18,27 @@ function productAdd() {
     var type = getEle('type').value;
 
 
-    var product = {
-        name,
-        price,
-        screen,
-        blackCamera,
-        frontCamera,
-        img,
-        desc,
-        type,
-    }
+    var productData = { name, price, screen, blackCamera, frontCamera, img, desc, type };
 
-    axios.post('https://64709e4f3de51400f724a111.mockapi.io/product')
+    return productData;
+}
+// Add
+function productAdd() {
+    var productData = getUserInput();
+    axios.post('https://64709e4f3de51400f724a111.mockapi.io/product', {
+        name: productData.name,
+        price: productData.price,
+        screen: productData.screen,
+        blackCamera: productData.blackCamera,
+        frontCamera: productData.frontCamera,
+        img: productData.img,
+        desc: productData.desc,
+        type: productData.type
+    })
         .then((response) => {
             console.log(response);
-            console.log("added")
+            alert("Added New Product!")
+            renderProduct();
         })
         .catch((error) => {
             console.log(error);
@@ -55,9 +52,7 @@ function productDelete(id) {
     axios.delete(`https://64709e4f3de51400f724a111.mockapi.io/product/${id}`)
         .then((response) => {
             alert(`deleted product with id: ` + id)
-            fetchData().then(() => {
-                renderProduct();
-            })
+            renderProduct();
         })
         .catch((error) => {
             console.log(error);
@@ -67,12 +62,17 @@ function productDelete(id) {
 
 // Render: 
 var renderProduct = () => {
-    var contentHTML = "";
-    for (var i = 0; i < productArr.length; i++) {
-        var product = productArr[i];
-        var stt = 1;
-        contentHTML +=
-            `<tr>
+    axios.get('https://64709e4f3de51400f724a111.mockapi.io/product')
+        .then((response) => {
+            productArr = response.data;
+
+
+            var contentHTML = "";
+            for (var i = 0; i < productArr.length; i++) {
+                var product = productArr[i];
+                var stt = 1;
+                contentHTML +=
+                    `<tr>
         <td>${stt++}</td>
         <td>${product.id}</td>
         <td>${product.name}</td>
@@ -87,11 +87,13 @@ var renderProduct = () => {
         </tr>
         `
 
-        getEle('adminProductTbl').innerHTML = contentHTML
-    }
+                getEle('adminProductTbl').innerHTML = contentHTML
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 }
 
-// Run this function to rerender the table:
-fetchData().then(() => {
-    renderProduct();
-})
+// Run this function to render the table:
+renderProduct();
