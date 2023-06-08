@@ -104,6 +104,15 @@ body {
   background-size: cover;
 }
 
+#banner {
+  height: 100vh;
+  padding: 3em;
+}
+
+#products {
+  padding: 0 5em;
+}
+
 .card {
   background-color: var(--primary-bg-color);
   color: var(--text-mode-white);
@@ -112,10 +121,10 @@ body {
   transition: all 0.2s ease;
 }
 .card:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 .card:hover::after {
-  opacity: 30%;
+  opacity: 50%;
 }
 .card::after {
   content: "";
@@ -164,4 +173,14 @@ body {
 }
 .card__Overlay:hover .card__Overlayfooter {
   transform: translateY(-30px);
+}
+
+#cartModel .modal-dialog {
+  margin: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 50%;
+  background-color: red;
 }/*# sourceMappingURL=customer.css.map */

@@ -25,13 +25,20 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+
+    <!-- Animation css -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
     <!-- Style -->
     <link rel="stylesheet" href="../../assets/css/customer.css" />
   </head>
   <body>
-    <div class = "landingpage">
+    <div class="landingpage">
       <header class="container">
-        <nav class="p-1 m-auto navbar navbar-expand-lg navbar-dark fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
           <div>
             <a class="navbar-brand m-2" href="../../index.html">
               <i class="fa-lg fa-solid fa-robot m-3"></i>CyberPhone
@@ -51,22 +58,9 @@
           </button>
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav">
-              <li class="nav-item text-center">
-                <a
-                  class="nav-link active"
-                  href="../../index.html"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <div>
-                    <i class="fas fa-home fa-xl"></i>
-                  </div>
-                  Home
-                </a>
-              </li>
-
+            <div
+              class="navbar-nav d-flex justify-content-between w-100 px-5 py-2"
+            >
               <li class="nav-item text-center">
                 <a
                   class="nav-link active"
@@ -82,24 +76,29 @@
                 </a>
               </li>
 
-              <li class="nav-item text-center">
-                <a
-                  class="nav-link js-toggle-cart active"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <div>
-                    <i class="fa-solid fa-xl fa-shopping-cart"></i>
-                    <span
-                      class="badge rounded-pill badge-notification bg-light text-dark"
-                      id="cartCount"
-                    ></span>
-                  </div>
-                  Cart
-                </a>
-              </li>
-            </ul>
+              <ul>
+                <li class="nav-item text-center">
+                  <a
+                    style="cursor: pointer"
+                    class="nav-link js-toggle-cart active"
+                    role="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    data-toggle="modal"
+                    data-target="#cartModel"
+                  >
+                    <div>
+                      <i class="fa-solid fa-xl fa-shopping-cart"></i>
+                      <span
+                        class="badge rounded-pill badge-notification bg-light text-dark"
+                        id="cartCount"
+                      ></span>
+                    </div>
+                    Cart
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </nav>
       </header>
@@ -137,15 +136,64 @@
           </div>
         </section>
 
+        <!-- Modal -->
+        <div
+          class="modal animate__animated animate__fadeInRight animate__faster"
+          id="cartModel"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="modelTitleId"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="container-fluid">Add rows here</div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button type="button" class="btn btn-primary">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          $("#exampleModal").on("show.bs.modal", (event) => {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+            // Use above variables to manipulate the DOM
+          });
+        </script>
+
         <!-- Products -->
         <section id="products">
           <div class="container-fluid">
-            <div class="form-group">
-              <select class="custom-select" name="selectType" id="selectType">
-                <option selected>Type</option>
-                <option value="">Apple</option>
-                <option value="">Samsung</option>
-              </select>
+            <div class="d-flex justify-content-end">
+              <div class="form-group" style="background-color: red">
+                <select class="custom-select" name="selectType" id="selectType">
+                  <option selected>Type</option>
+                  <option value="">Apple</option>
+                  <option value="">Samsung</option>
+                </select>
+              </div>
             </div>
             <div id="customerProductList" class="row mx--lg-5"></div>
           </div>
