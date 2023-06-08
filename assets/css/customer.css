@@ -171,16 +171,15 @@ body {
 .card__Overlay:hover .card__OverlayBody {
   transform: translateY(30px);
 }
-.card__Overlay:hover .card__Overlayfooter {
+.card__Overlay:hover .card__OverlayFooter {
   transform: translateY(-30px);
 }
 
-#cartModel .modal-dialog {
+#cartModel .modal-content {
   margin: 0;
   position: fixed;
   top: 0;
   right: 0;
   height: 100%;
-  width: 50%;
-  background-color: red;
+  width: 20%;
 }/*# sourceMappingURL=customer.css.map */

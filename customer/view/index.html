@@ -148,7 +148,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title">Shopping Cart</h5>
                 <button
                   type="button"
                   class="close"
@@ -175,23 +175,15 @@
           </div>
         </div>
 
-        <script>
-          $("#exampleModal").on("show.bs.modal", (event) => {
-            var button = $(event.relatedTarget);
-            var modal = $(this);
-            // Use above variables to manipulate the DOM
-          });
-        </script>
-
         <!-- Products -->
         <section id="products">
           <div class="container-fluid">
             <div class="d-flex justify-content-end">
-              <div class="form-group" style="background-color: red">
-                <select class="custom-select" name="selectType" id="selectType">
+              <div class="form-group">
+                <select class="custom-select" name="selectType" id="selectType" onchange="sortKind(value)">
                   <option selected>Type</option>
-                  <option value="">Apple</option>
-                  <option value="">Samsung</option>
+                  <option value="Apple">Apple</option>
+                  <option value="Samsung" >Samsung</option>
                 </select>
               </div>
             </div>

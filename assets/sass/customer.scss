@@ -83,7 +83,7 @@ body {
                 transform: translateY(30px);
             }
 
-            &footer {
+            &Footer {
                 transform: translateY(-30px);
             }
 
@@ -93,14 +93,12 @@ body {
 
 
 #cartModel {
-
-    .modal-dialog {
+    .modal-content {
         margin: 0;
         position: fixed;
         top: 0;
         right: 0;
         height: 100%;
-        width: 50%;
-        background-color: red;
+        width: 20%;
     }
 }
