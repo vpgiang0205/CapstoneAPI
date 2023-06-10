@@ -7,15 +7,13 @@ body {
     background-size: cover;
 }
 
+// Banner
 #banner {
     height: 100vh;
     padding: 3em;
 }
 
-#products {
-    padding: 0 5em;
-}
-
+// Product & Product Overlay
 .card {
     background-color: var(--primary-bg-color);
     color: var(--text-mode-white);
@@ -59,14 +57,16 @@ body {
 
     &Footer {
         transition: all 0.25s ease;
-
+        position: absolute;
+        bottom: 10px;
         button {
             padding: 15px 30px;
         }
     }
 
     &Header {
-        font-size: 200%;
+        font-size: 150%;
+        text-align: center;
     }
 
     &Body {
@@ -84,14 +84,14 @@ body {
             }
 
             &Footer {
-                transform: translateY(-30px);
+                transform: translateY(-25px);
             }
 
         }
     }
 }
 
-
+// Cart
 #cartModel {
     .modal-content {
         margin: 0;

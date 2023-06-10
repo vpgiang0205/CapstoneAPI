@@ -25,7 +25,7 @@ function getUserInput() {
 // Add
 function productAdd() {
     var productData = getUserInput();
-    axios.post('https://64709e4f3de51400f724a111.mockapi.io/product', {
+    axios.post('https://64832aa2f2e76ae1b95c0f17.mockapi.io/product', {
         name: productData.name,
         price: productData.price,
         screen: productData.screen,
@@ -49,7 +49,7 @@ function productAdd() {
 // Delete
 function productDelete(id) {
     console.log(id)
-    axios.delete(`https://64709e4f3de51400f724a111.mockapi.io/product/${id}`)
+    axios.delete(`https://64832aa2f2e76ae1b95c0f17.mockapi.io/product/${id}`)
         .then((response) => {
             alert(`deleted product with id: ` + id)
             renderProduct();
@@ -62,11 +62,9 @@ function productDelete(id) {
 
 // Render: 
 var renderProduct = () => {
-    axios.get('https://64709e4f3de51400f724a111.mockapi.io/product')
+    axios.get('https://64832aa2f2e76ae1b95c0f17.mockapi.io/product')
         .then((response) => {
             productArr = response.data;
-
-
             var contentHTML = "";
             for (var i = 0; i < productArr.length; i++) {
                 var product = productArr[i];
@@ -77,7 +75,7 @@ var renderProduct = () => {
         <td>${product.id}</td>
         <td>${product.name}</td>
         <td>${product.price}</td>
-        <td> <img src = "${product.img}"></td>
+        <td> <img src = ${product.img}></td>
         <td>${product.desc}</td>
         <td>
         <button class = "btn btn-danger" data-toggle="modal" data-target="#modelId" value ="${product.id}">Edit</button>

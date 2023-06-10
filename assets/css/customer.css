@@ -109,10 +109,6 @@ body {
   padding: 3em;
 }
 
-#products {
-  padding: 0 5em;
-}
-
 .card {
   background-color: var(--primary-bg-color);
   color: var(--text-mode-white);
@@ -153,12 +149,15 @@ body {
 }
 .card__OverlayFooter {
   transition: all 0.25s ease;
+  position: absolute;
+  bottom: 10px;
 }
 .card__OverlayFooter button {
   padding: 15px 30px;
 }
 .card__OverlayHeader {
-  font-size: 200%;
+  font-size: 150%;
+  text-align: center;
 }
 .card__OverlayBody {
   position: absolute;
@@ -172,7 +171,7 @@ body {
   transform: translateY(30px);
 }
 .card__Overlay:hover .card__OverlayFooter {
-  transform: translateY(-30px);
+  transform: translateY(-25px);
 }
 
 #cartModel .modal-content {
