@@ -1,22 +1,18 @@
 import Api from '../services/api.js';
+import Product from '../model/Product.js';
+import CartItem from '../model/CartItem.js';
 const api = new Api();
-
 // GetEle:
-function getEle(id) {
-    return document.getElementById(id)
-}
+const getEle = (id) => document.getElementById(id)
 
-// Render:
-const renderProduct = (data) => {
-    api.callApi("product", "GET", null)
-        .then((rs) => {
-            let data = rs.data;
-            let contentHTML = "";
-            if (data && data.length > 0) {
-                data.forEach((product) => {
-                    let truncatedDesc = product.desc.length > 100 ? product.desc.slice(0, 50) + "..." : product.desc;
-                    contentHTML +=
-                        `
+// RenderUI of the page
+function renderUI(data) {
+    let content = "";
+    if (data && data.length > 0) {
+        data.forEach((product) => {
+            let truncatedDesc = product.desc.length > 100 ? product.desc.slice(0, 50) + "..." : product.desc;
+            content +=
+                `
                         <div class="col-lg-3 col-md-6 my-3">
                             <div class="card text-black h-100">
                             <div class="card__Overlay">
@@ -31,7 +27,7 @@ const renderProduct = (data) => {
                                             <a href="">Click here for more details</a>
                                         </div>
                                         <div class = "card__OverlayFooter">
-                                        <button id="" class="" onclick="btnAddToCart(${product.id})" value="${product.id}" >Add to Cart</button>
+                                        <button type="button" class=""  onclick="btnAddToCart(${product.id})" >Add to Cart</button>
                                         </div>
                             </div>
                                 <img src="${product.img}" class="" alt="${product.name}">
@@ -44,182 +40,101 @@ const renderProduct = (data) => {
                             </div>
                         </div>
                             `;
-                })
-            }
-            getEle("customerProductList").innerHTML = contentHTML;
+        })
+        getEle("customerProductList").innerHTML = content;
+    }
+}
+
+// Render Product:
+function renderProduct() {
+    api.callApi("product", "GET", null)
+        .then((rs) => {
+            // run renderUI
+            renderUI(rs.data)
         })
         .catch((error) => {
             console.log(error)
         })
 };
-renderProduct();
-// sort
-getEle('selectType').onchange = function (value) {
-    console.log(value)
-    sortKind(value)
+renderProduct()
+
+
+// Clear
+function clearBtn() {
+    localStorage.removeItem("cart");
+    renderCartItem(cart.arr)
 }
-function sortKind(kind) {
 
-    api.callApi("product", "GET", null)
-        .then((response) => {
-            var productArr = response.data;
-            var contentHTML = "";
-            for (var i = 0; i < productArr.length; i++) {
-                var product = productArr[i];
-                if (product.type === kind && kind !== "Type") {
-                    var truncatedDesc = product.desc.length > 100 ? product.desc.slice(0, 50) + "..." : product.desc;
-                    contentHTML +=
-                        `
-                            <div class="col-lg-3 col-md-6 my-3">
-                                <div class="card text-black h-100">
-                                    <div class="card__Overlay">
-                                        <div class="card__OverlayHeader">${product.name}</div>
-                                            <div class="card__OverlayBody">
-                                                <p>Screen: ${product.screen}</p>
-                                                <p>Back Camera: ${product.blackCamera}</p>
-                                                <p>Front Camera: ${product.frontCamera}</p>
-                                                <br>
-                                                <a href="">Click here for more details</a>
-                                            </div>
+// Sort
+getEle('selectType').addEventListener("change", async () => {
+    const value = getEle('selectType').value
 
-                                            <div class = "card__OverlayFooter"><button id="" class="" value="${product.id}" >Add to Cart</button></div>
-                                    </div>
-                                                <img src="${product.img}" class="" alt="${product.name}">
-                                                <div class="card-body">
-                                                <p>${product.type}</p>
-                                                <h5 class="card-title">${product.name}</h5>
-                                                <p class="card-text">${truncatedDesc}</p>
-                                                <p class="card-text">Price: ${product.price}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            `;
-                }
-            }
-            getEle("customerProductList").innerHTML = contentHTML;
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+    let result = await api.callApi("product", "GET", null)
+    if (result.status == 200 && result.statusText === "OK") { // success
+        let mangTimKiem = [];
+        mangTimKiem = result.data.filter((product) => product.type === value)
+        renderUI(mangTimKiem)
+    }
+})
+
+
+// LocalStorage
+function setLocalStorage() {
+    //convert Json => String
+    var dataString = JSON.stringify(cart.arr);
+    //set localStorage
+    localStorage.setItem("cart", dataString);
 }
-// // Cart
-// var cartArr = [];
 
-// function getItem(id) {
-//     return axios
-//         .get(`https://64832aa2f2e76ae1b95c0f17.mockapi.io/product/${id}`)
-//         .then((response) => {
-//             var itemdata = response.data;
-
-//             // data to Model CartItem
-//             let cartItem = new CartItem(
-//                 itemdata.id,
-//                 itemdata.name,
-//                 itemdata.price,
-//                 itemdata.img,
-//                 itemdata.screen,
-//                 itemdata.blackCamera,
-//                 itemdata.frontCamera,
-//                 itemdata.desc,
-//                 itemdata.type,
-//                 1
-//             );
-//             return cartItem;
-//         })
-//         .catch((error) => {
-//             console.log(error);
-//         });
-// }
-
-// function pushLocalStorageToArray(cartArr) {
-//     var cartData = localStorage.getItem("cart");
-//     if (cartData) {
-//         var parsedData = JSON.parse(cartData);
-//         cartArr.push(...parsedData);
-//     }
-// }
-// // Add to cart
-// function addToCart(id) {
-//     getItem(id)
-//         .then((cartItem) => {
-//             if (cartItem.id != cartArr.cartItem.id) {
-//                 var content = `
-//             <p>${cartItem.name}</p>
-//             <p>Price: ${cartItem.price}</p>
-//             <p>Quantity: ${cartItem.quantity}</p>
-//             <button class="remove-item" onclick="removeCartItem()">Remove</button>
-//             `;
+function getLocalStorage() {
+    //check condition
+    if (localStorage.getItem("cart")) {
+        var dataString = localStorage.getItem("cart");
+        //convert String => Json
+        cart.arr = JSON.parse(dataString);
+        renderCartItem(cart)
+    }
+}
+getLocalStorage();
 
 
+// Cart 
+let cart = [];
 
-//                 cartArr.push(cartItem);
-//                 getEle('cartContent').innerHTML += content;
+window.btnAddToCart = async (value) => {
+    const phoneData = await api.callApi(`product/${value}`, 'GET', null);
+    const { id, name, price, screen, backCamera, frontCamera, img, desc, type } = phoneData.data;
+    const product = new Product(id, name, price, img, screen, backCamera, frontCamera, desc, type);
 
+    const newCartItem = new CartItem(product, 1);
 
-//                 cart.addToCart(cartItem); // Add item to the cart
-//                 setLocalStorage();
-//             }
-//         })
-//         .catch((error) => {
-//             console.log(error);
-//         });
-// }
+    let cartItem = findItemById(cart, newCartItem.product.id);
 
+    if (cartItem.length === 0) {
+        cart.push(newCartItem);
+        console.log('Thêm sản phẩm vào giỏ hàng thành công!');
+    } else {
+        cartItem.quantity++
+        console.log('Số lượng sản phẩm đã được cập nhật!');
+    }
 
-// // Show cart items
-// function renderCartItem(cartData) {
+};
 
-//     // Generate HTML content based on the cart data
-//     var content = "";
-//     if (cartData) {
-//         getEle("cartCount").innerHTML = cartArr.length;
-//         for (var i = 0; i < cartData.length; i++) {
-//             var item = cartData[i]
-//             content += `
-//             <div>
-//               <p>${item.name}</p>
-//               <p>Price: ${item.price}</p>
-//               <p>Quantity: ${item.quantity}</p>
-//               <button class="remove-item" onclick="removeCartItem()">Remove</button>
-//             </div>
-//           `;
-//         };
-//     } else {
-//         content = "<p>No items in the cart.</p>";
-//     }
+function findItemById(cart, id) {
+    return cart.filter((item) => item.product.id === id);
+}
 
-//     // Update the inner HTML of the cartContent element
-//     document.getElementById("cartContent").innerHTML = content;
-// }
-
-// // Run this function to render the table:
-// renderProduct();
-// renderCartItem();
-
-
-
-// // LocalStorage
-// function setLocalStorage() {
-//     //convert Json => String
-//     var dataString = JSON.stringify(cart.arr);
-//     //set localStorage
-//     localStorage.setItem("cart", dataString);
-// }
-
-// function getLocalStorage() {
-//     //check condition
-//     if (localStorage.getItem("cart")) {
-//         var dataString = localStorage.getItem("cart");
-//         //convert String => Json
-//         cart.arr = JSON.parse(dataString);
-//         renderCartItem(cart.arr)
-//     }
-// }
-
-// getLocalStorage();
-
-// // Clear
-// function clearBtn() {
-//     localStorage.removeItem("cart");
-//     renderCartItem(cart.arr)
-// }
+// Render cart and other functions...
+function renderCartItem(cart) {
+    console.log(cart)
+    // const cartItemHTML = `
+    //     <div class="cart-item">
+    //         <div class="item-name">${cart.product.name}</div>
+    //         <div class="item-quantity">${cart.quantity}</div>
+    //         <div class="item-price">${cart.price}</div>
+    //     </div>
+    // `;
+    // getEle('cartContent').innerHTML += cartItemHTML
+    // return cartItemHTML;
+}
+// Export necessary functions if needed

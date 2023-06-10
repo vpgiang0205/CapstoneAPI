@@ -8,3 +8,16 @@ export default class Api {
         });
     }
 }
+
+export class Service {
+    getItemById(id){
+       Api.callApi(id, 'GET', null)
+       .then((rs) => {
+           // run renderUI
+           console.log(rs.data)
+       })
+                .catch((error) => {
+                    console.log(error)
+                })
+    }
+}

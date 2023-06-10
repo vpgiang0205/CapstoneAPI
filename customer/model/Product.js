@@ -1,5 +1,5 @@
 class Product {
-    constructor(id, name, price, img, screen, blackCamera, frontCamera, desc, type, quantity) {
+    constructor(id, name, price, img, screen, blackCamera, frontCamera, desc, type) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -9,9 +9,16 @@ class Product {
         this.frontCamera = frontCamera;
         this.desc = desc;
         this.type = type;
-        this.quantity = quantity;
     }
     // Các phương thức khác
+    getProductById(id){
+        const api = new Api();
+        api.callApi(id , 'GET', null)
+        .then ((response) =>{
+            console.log(response.data)
+        })
+        .catch ((error) => { console.log(error) })
+    }
 }
 
 export default Product;
