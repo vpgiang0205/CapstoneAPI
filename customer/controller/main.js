@@ -1,9 +1,12 @@
 import Api from '../services/api.js';
 import Product from '../model/Product.js';
 import CartItem from '../model/CartItem.js';
+import Cart from '../model/Cart.js';
 const api = new Api();
+const cart = new Cart();
 // GetEle:
 const getEle = (id) => document.getElementById(id)
+
 
 // RenderUI of the page
 function renderUI(data) {
@@ -58,13 +61,6 @@ function renderProduct() {
 };
 renderProduct()
 
-
-// Clear
-function clearBtn() {
-    localStorage.removeItem("cart");
-    renderCartItem(cart.arr)
-}
-
 // Sort
 getEle('selectType').addEventListener("change", async () => {
     const value = getEle('selectType').value
@@ -78,63 +74,82 @@ getEle('selectType').addEventListener("change", async () => {
 })
 
 
+// Cart (Riêng phần này chú thích vietsub cho teammate dễ hiểu)
+let cartArr = [];
+window.btnAddToCart = async (value) => {
+    // Khi nhấn thêm, gọi API để lấy dữ liệu sản phẩm
+    const phoneData = await api.callApi(`product/${value}`, 'GET', null);
+
+    // Tạo các biến và gán giá trị từ dữ liệu lấy được
+    const { id, name, price, screen, backCamera, frontCamera, img, desc, type } = phoneData.data;
+
+    // Tạo đối tượng sản phẩm với các giá trị đã lấy được
+    const product = new Product(id, name, price, img, screen, backCamera, frontCamera, desc, type);
+
+    // Tạo đối tượng mới sẽ được thêm vào giỏ hàng với số lượng là 1
+    const newCartItem = new CartItem(product, 1);
+
+    // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+    let cartItem = product.checkProductExist(cartArr, newCartItem.product.id);
+
+    if (cartItem.length === 0) {
+        // Nếu sản phẩm chưa tồn tại, thêm vào giỏ hàng
+        cartArr.push(newCartItem);
+        console.log('Thêm sản phẩm vào giỏ hàng thành công!');
+    } else {
+        // Chạy vòng lặp check các sản phẩm 
+        for (let i = 0; i < cartItem.length; i++) {
+            const item = cartItem[i];
+            // Nếu id của item (sản phẩm) trong giỏ hàng có cùng id sản phẩm mới thêm vào thì
+            if (item.product.id === newCartItem.product.id) {
+                // Tăng số lượng của item đã có +1
+                item.quantity++;
+                console.log('Số lượng sản phẩm đã được cập nhật!');
+                console.log(item.quantity);
+                break; // Thoát khỏi vòng lặp sau khi tìm thấy sản phẩm
+            }
+        }
+    }
+
+    setLocalStorage();
+    renderCartItem(cartArr);
+};
+
+function renderCartItem(cartArr) {
+    const cartItemsHTML = cartArr.map(cartItem => `
+        <div class="cart-item">
+            <div class="item-name">${cartItem.product.name}</div>
+            <div class="item-quantity">${cartItem.quantity}</div>
+            <div class="item-price">${cartItem.product.price}</div>
+        </div>
+    `).join("");
+
+    getEle('cartContent').innerHTML = cartItemsHTML;
+}
+
 // LocalStorage
 function setLocalStorage() {
-    //convert Json => String
-    var dataString = JSON.stringify(cart.arr);
-    //set localStorage
+    // Convert cartArr to string
+    var dataString = JSON.stringify(cartArr);
+    // Set localStorage
     localStorage.setItem("cart", dataString);
 }
 
 function getLocalStorage() {
-    //check condition
+    // Check condition
     if (localStorage.getItem("cart")) {
         var dataString = localStorage.getItem("cart");
-        //convert String => Json
-        cart.arr = JSON.parse(dataString);
-        renderCartItem(cart)
+        // Convert string to cartArr
+        cartArr = JSON.parse(dataString);
+        renderCartItem(cartArr);
     }
 }
+
+window.clearLocalStorage = clearLocalStorage;
+function clearLocalStorage() {
+    localStorage.removeItem("cart");
+    cartArr = [];
+    renderCartItem(cartArr); 
+}
+
 getLocalStorage();
-
-
-// Cart 
-let cart = [];
-
-window.btnAddToCart = async (value) => {
-    const phoneData = await api.callApi(`product/${value}`, 'GET', null);
-    const { id, name, price, screen, backCamera, frontCamera, img, desc, type } = phoneData.data;
-    const product = new Product(id, name, price, img, screen, backCamera, frontCamera, desc, type);
-
-    const newCartItem = new CartItem(product, 1);
-
-    let cartItem = findItemById(cart, newCartItem.product.id);
-
-    if (cartItem.length === 0) {
-        cart.push(newCartItem);
-        console.log('Thêm sản phẩm vào giỏ hàng thành công!');
-    } else {
-        cartItem.quantity++
-        console.log('Số lượng sản phẩm đã được cập nhật!');
-    }
-
-};
-
-function findItemById(cart, id) {
-    return cart.filter((item) => item.product.id === id);
-}
-
-// Render cart and other functions...
-function renderCartItem(cart) {
-    console.log(cart)
-    // const cartItemHTML = `
-    //     <div class="cart-item">
-    //         <div class="item-name">${cart.product.name}</div>
-    //         <div class="item-quantity">${cart.quantity}</div>
-    //         <div class="item-price">${cart.price}</div>
-    //     </div>
-    // `;
-    // getEle('cartContent').innerHTML += cartItemHTML
-    // return cartItemHTML;
-}
-// Export necessary functions if needed

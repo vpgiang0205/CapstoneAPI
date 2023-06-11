@@ -11,13 +11,8 @@ class Product {
         this.type = type;
     }
     // Các phương thức khác
-    getProductById(id){
-        const api = new Api();
-        api.callApi(id , 'GET', null)
-        .then ((response) =>{
-            console.log(response.data)
-        })
-        .catch ((error) => { console.log(error) })
+    checkProductExist(cartArr, id) {
+        return cartArr.filter((item) => item.product.id === id);
     }
 }
 
