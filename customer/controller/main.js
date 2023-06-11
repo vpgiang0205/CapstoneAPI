@@ -30,7 +30,7 @@ function renderUI(data) {
                                             <a href="">Click here for more details</a>
                                         </div>
                                         <div class = "card__OverlayFooter">
-                                        <button type="button" class=""  onclick="btnAddToCart(${product.id})" >Add to Cart</button>
+                                        <button type="button" class="" id="btnAdd" onclick="btnAddToCart(${product.id})" >Add to Cart</button>
                                         </div>
                             </div>
                                 <img src="${product.img}" class="" alt="${product.name}">
@@ -76,6 +76,7 @@ getEle('selectType').addEventListener("change", async () => {
 
 // Cart (Riêng phần này chú thích vietsub cho teammate dễ hiểu)
 let cartArr = [];
+// Thêm sản phẩm vào giỏ
 window.btnAddToCart = async (value) => {
     // Khi nhấn thêm, gọi API để lấy dữ liệu sản phẩm
     const phoneData = await api.callApi(`product/${value}`, 'GET', null);
@@ -110,7 +111,6 @@ window.btnAddToCart = async (value) => {
             }
         }
     }
-
     setLocalStorage();
     renderCartItem(cartArr);
 };
@@ -123,7 +123,7 @@ function renderCartItem(cartArr) {
             <div class="item-price">${cartItem.product.price}</div>
         </div>
     `).join("");
-
+    count();
     getEle('cartContent').innerHTML = cartItemsHTML;
 }
 
@@ -149,7 +149,17 @@ window.clearLocalStorage = clearLocalStorage;
 function clearLocalStorage() {
     localStorage.removeItem("cart");
     cartArr = [];
-    renderCartItem(cartArr); 
+    count()
+
+    renderCartItem(cartArr);
 }
+
+function count() {
+    var cartArr = JSON.parse(localStorage.getItem('cart')) || [];
+    var cartCount = cartArr.length;
+    document.getElementById('cartCount').innerText = cartCount;
+}
+
+count();
 
 getLocalStorage();
