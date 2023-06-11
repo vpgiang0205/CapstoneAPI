@@ -59,7 +59,6 @@ function productDelete(id) {
         });
 }
 
-
 // Render:
 var renderProduct = (price) => {
     axios

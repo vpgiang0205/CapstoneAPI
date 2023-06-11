@@ -56,7 +56,20 @@ li, a, link, link:hover, a:hover {
 
 /* RESPONSIVE */
 /*  pc: width >= 1024px */
+@media screen and (min-width: 1025px) {
+  #cartModel .modal-content {
+    width: 20%;
+  }
+}
 /* tablet: 740<= width < 1024 */
+@media screen and (min-width: 740px) and (max-width: 1024px) {
+  #cartModel .modal-content {
+    width: 50%;
+  }
+  #cartModel .cardItem img {
+    width: 100%;
+  }
+}
 /* moblie: width < 740px */
 @media screen and (max-width: 739px) {
   #landingpage .card {
@@ -70,6 +83,15 @@ li, a, link, link:hover, a:hover {
   #landingpage .card img {
     margin: auto;
     height: 7rem;
+  }
+  #cartModel .modal-content {
+    width: 50%;
+  }
+  #cartModel #cardItem img {
+    width: 100%;
+  }
+  #cartModel #cardItem .cardItemFooter {
+    width: 100%;
   }
 }
 /* Common: định dạng cho các phần cả 2 trang dùng chung */

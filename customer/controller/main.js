@@ -1,7 +1,7 @@
-import Api from '../services/api.js';
-import Product from '../model/Product.js';
-import CartItem from '../model/CartItem.js';
 import Cart from '../model/Cart.js';
+import CartItem from '../model/CartItem.js';
+import Product from '../model/Product.js';
+import Api from '../services/api.js';
 const api = new Api();
 const cart = new Cart();
 // GetEle:
@@ -17,7 +17,7 @@ function renderUI(data) {
             content +=
                 `
                         <div class="col-lg-3 col-md-6 my-3">
-                            <div class="card text-black h-100">
+                            <div class="card product text-black h-100">
                             <div class="card__Overlay">
                                         <div class="card__OverlayHeader">
                                         ${product.name}
@@ -117,16 +117,56 @@ window.btnAddToCart = async (value) => {
 
 function renderCartItem(cartArr) {
     const cartItemsHTML = cartArr.map(cartItem => `
-        <div class="cart-item">
-            <div class="item-name">${cartItem.product.name}</div>
-            <div class="item-quantity">${cartItem.quantity}</div>
-            <div class="item-price">${cartItem.product.price}</div>
+        <div class="card mb-3 p-2 bg-secondary">
+            <div id="cardItem" class = "d-flex justify-content-between align-items-center flex-wrap ">
+            
+            
+            <img width= 100 src = "${cartItem.product.img}">    
+                    <div >
+                        <div >${cartItem.product.name}</div>
+                        
+                        <div class = "text-center mt-2">
+                        <button onclick ="cartQuantityMinus(${cartItem.product.id})" class = "btn-danger miniBtn" ><i class="fa-solid fa-minus"></i></button>
+                          ${cartItem.quantity}
+                        <button onclick ="cartQuantityPlus(${cartItem.product.id})" class = "btn-danger miniBtn" ><i class="fa-solid fa-plus"></i></button>
+                        </div>
+
+                    </div>
+                        
+                    <div class="text-center cardItemFooter">${cartItem.product.price}
+                          <div> <button onclick ="deleteCartItem(${cartItem.product.id})" class = "btn-danger mt-2 p-2" >
+                    remove</button></div>
+                    </div>
+              
+            </div>
         </div>
     `).join("");
     count();
     getEle('cartContent').innerHTML = cartItemsHTML;
 }
 
+const findItemById = (id) => {
+    return cartArr = cartArr.filter((item) => item.product.id !== id);
+};
+
+window.deleteCartItem = (id) => {
+    let cartItem = findItemById(id);
+    console.log(cartItem)
+    renderCartItem(cartArr);
+    setLocalStorage();
+};
+
+window.cartQuantityMinus = (id) => {
+    let cartItem = findItemById(id);
+    if (cartItem) {
+        cartItem.quantity--;
+        if (cartItem.quantity <= 0) {
+            cartArr.splice(cartArr.indexOf(cartItem), 1);
+        }
+    }
+    renderCartItem(cartArr);
+    setLocalStorage();
+};
 // LocalStorage
 function setLocalStorage() {
     // Convert cartArr to string
@@ -150,7 +190,6 @@ function clearLocalStorage() {
     localStorage.removeItem("cart");
     cartArr = [];
     count()
-
     renderCartItem(cartArr);
 }
 
