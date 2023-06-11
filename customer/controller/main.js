@@ -10,6 +10,7 @@ const getEle = (id) => document.getElementById(id)
 
 // RenderUI of the page
 function renderUI(data) {
+
     let content = "";
     if (data && data.length > 0) {
         data.forEach((product) => {
@@ -64,7 +65,10 @@ renderProduct()
 // Sort
 getEle('selectType').addEventListener("change", async () => {
     const value = getEle('selectType').value
-
+    if (value === "Type") {
+        renderProduct()
+    }
+    
     let result = await api.callApi("product", "GET", null)
     if (result.status == 200 && result.statusText === "OK") { // success
         let mangTimKiem = [];
