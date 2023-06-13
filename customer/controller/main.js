@@ -62,19 +62,26 @@ function renderProduct() {
 };
 renderProduct()
 
-// Sort
+// Filter
 getEle('selectType').addEventListener("change", async () => {
-    const value = getEle('selectType').value
-    if (value === "Type") {
+    const type = getEle('selectType').value
+    if (type.length == 0) {
         renderProduct()
+    } else {
+
+
+        let response = await api.callApi("product", "GET", null)
+        if (response.status == 200 && response.statusText === "OK") { // success
+            let FilterArr = [];
+            FilterArr = response.data.filter((product) => product.type == type)
+            console.log(FilterArr)
+            if (FilterArr.length == 0 && type.length > 0) {
+                console.log("rong")
+            }
+            renderUI(FilterArr)
+        }
     }
 
-    let result = await api.callApi("product", "GET", null)
-    if (result.status == 200 && result.statusText === "OK") { // success
-        let mangTimKiem = [];
-        mangTimKiem = result.data.filter((product) => product.type === value)
-        renderUI(mangTimKiem)
-    }
 })
 
 
@@ -118,36 +125,55 @@ window.btnAddToCart = async (value) => {
     setLocalStorage();
     renderCartItem(cartArr);
 };
-
 function renderCartItem(cartArr) {
-    const cartItemsHTML = cartArr.map(cartItem => `
-        <div class="card mb-3 p-2 bg-secondary">
-            <div id="cardItem" class = "d-flex justify-content-between align-items-center">
-            
-            
-            <img width= 100 src = "${cartItem.product.img}">    
-                    <div >
-                        <div class="px-2">${cartItem.product.name}</div>
-                        
-                        <div class = "text-center mt-2">
-                        <button onclick ="cartQuantityMinus(${cartItem.product.id})" class = "btn-danger miniBtn" ><i class="fa-solid fa-minus"></i></button>
-                          ${cartItem.quantity}
-                        <button onclick ="cartQuantityPlus(${cartItem.product.id})" class = "btn-danger miniBtn" ><i class="fa-solid fa-plus"></i></button>
-                        </div>
+    const cartItemsHTML = cartArr
+        .map(
+            (cartItem) => {
+                if (cartItem.quantity === 0) {
+                    return ""; // Skip rendering for items with quantity 0
+                }
 
-                    </div>
-                        
-                    <div class="text-center cardItemFooter">${cartItem.product.price}
-                          <div> <button onclick ="deleteCartItem(${cartItem.product.id})" class = "btn-danger mt-2 p-2" >
-                    remove</button></div>
-                    </div>
-              
+                return `
+          <div class="card mb-3 p-2 bg-secondary">
+            <div id="cardItem" class="d-flex justify-content-between align-items-center">
+              <img width="100" src="${cartItem.product.img}">
+              <div>
+                <div class="px-2">${cartItem.product.name}</div>
+                <div class="text-center mt-2">
+                  <button onclick="decreaseQuantity(${cartItem.product.id})" class="btn-danger miniBtn">
+                    <i class="fa-solid fa-minus"></i>
+                  </button>
+                  ${cartItem.quantity}
+                  <button onclick="increaseQuantity(${cartItem.product.id})" class="btn-danger miniBtn">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="text-center cardItemFooter">
+                ${cartItem.product.price * cartItem.quantity}$
+                <div>
+                  <button onclick="deleteCartItem(${cartItem.product.id})" class="btn-danger mt-2 p-2">
+                    remove
+                  </button>
+                </div>
+              </div>
             </div>
-        </div>
-    `).join("");
+          </div>
+        `;
+            }
+        )
+        .join("");
+
+    const cartBillTotal = cartArr.reduce(
+        (sum, cartItem) => sum + cartItem.product.price * cartItem.quantity,
+        0
+    );
     count();
-    getEle('cartContent').innerHTML = cartItemsHTML;
+    getEle("cartContent").innerHTML = cartItemsHTML;
+    getEle("cartBillTotal").innerText = cartBillTotal + "$";
 }
+
+
 
 // CartBtn: Delete Item
 window.deleteCartItem = (id) => {
@@ -159,18 +185,51 @@ window.deleteCartItem = (id) => {
     setLocalStorage();
 };
 
-// CartBtn: MinusProduct
-window.cartQuantityMinus = (id) => {
-    let cartItem = findItemById(id);
+// CartBtn: decreaseQuantity
+window.decreaseQuantity = (id) => {
+    const filteredItems = cart.findItemById(id, cartArr);
+    const cartItem = filteredItems[0];
+
     if (cartItem) {
-        cartItem.quantity--;
-        if (cartItem.quantity <= 0) {
-            cartArr.splice(cartArr.indexOf(cartItem), 1);
+        cartItem.quantity--; // Decrease the quantity by 1
+
+        if (cartItem.quantity === 0) {
+            // Remove the item from the cart
+            cartArr = cart.findOtherItemById(id, cartArr);
+            console.log("Deleted cart item:", id);
+
+            // Remove item from local storage
+            cartArr = cartArr.filter((item) => item.product.id !== id);
+            console.log("Removed item:", cartItem.product.name);
+            setLocalStorage(); // Update local storage with modified cartArr
         }
+
+        console.log("Updated quantity:", cartItem.quantity);
+        renderCartItem(cartArr);
+        setLocalStorage(); // Update local storage with modified cartArr
+        count(); // Update the cart count in the UI
     }
-    renderCartItem(cartArr);
-    setLocalStorage();
 };
+
+window.increaseQuantity = (id) => {
+    const filteredItems = cart.findItemById(id, cartArr);
+    const cartItem = filteredItems[0];
+
+    if (cartItem) {
+        cartItem.quantity++; // Increase the quantity by 1
+
+        if (cartItem.quantity === 0) {
+            // Remove the item from the cart
+            cartArr = cartArr.filter((item) => item.product.id !== id);
+            console.log("Removed item:", cartItem.product.name);
+        }
+        console.log("Updated quantity:", cartItem.quantity);
+        renderCartItem(cartArr);
+        setLocalStorage(); // Update local storage with modified cartArr
+        count(); // Update the cart count in the UI
+    }
+};
+
 
 // LocalStorage
 function setLocalStorage() {
@@ -197,7 +256,8 @@ function clearLocalStorage() {
 
 function count() {
     var cartCount = cartArr.length;
-    document.getElementById('cartCount').innerText = cartCount;
+    getEle('cartCount').innerText = cartCount;
+    getEle('cartCountItem').innerText = cartCount;
 }
 
 // Run count product in cart: 
