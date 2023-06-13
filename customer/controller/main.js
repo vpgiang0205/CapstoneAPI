@@ -7,10 +7,25 @@ const cart = new Cart();
 // GetEle:
 const getEle = (id) => document.getElementById(id)
 
+// -----------------------------------------------------------------------------------------------------------------------
+/** ProductPage: */
+
+// Call API get Product:
+function renderProduct() {
+    api.callApi("product", "GET", null)
+        .then((rs) => {
+            // run renderUI of the page
+            renderUI(rs.data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+};
+renderProduct()
+
 
 // RenderUI of the page
 function renderUI(data) {
-
     let content = "";
     if (data && data.length > 0) {
         data.forEach((product) => {
@@ -49,27 +64,12 @@ function renderUI(data) {
     }
 }
 
-// Render Product:
-function renderProduct() {
-    api.callApi("product", "GET", null)
-        .then((rs) => {
-            // run renderUI
-            renderUI(rs.data)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-};
-renderProduct()
-
-// Filter
+// Filter:
 getEle('selectType').addEventListener("change", async () => {
     const type = getEle('selectType').value
     if (type.length == 0) {
         renderProduct()
     } else {
-
-
         let response = await api.callApi("product", "GET", null)
         if (response.status == 200 && response.statusText === "OK") { // success
             let FilterArr = [];
@@ -81,13 +81,15 @@ getEle('selectType').addEventListener("change", async () => {
             renderUI(FilterArr)
         }
     }
-
 })
 
+// -----------------------------------------------------------------------------------------------------------------
+/** CART */
 
-// Cart (Riêng phần này chú thích vietsub cho teammate dễ hiểu)
+// CartArr
 let cartArr = [];
-// Thêm sản phẩm vào giỏ
+
+// CartBtn: Add
 window.btnAddToCart = async (value) => {
     // Khi nhấn thêm, gọi API để lấy dữ liệu sản phẩm
     const phoneData = await api.callApi(`product/${value}`, 'GET', null);
@@ -125,18 +127,19 @@ window.btnAddToCart = async (value) => {
     setLocalStorage();
     renderCartItem(cartArr);
 };
+
+// Cart:Render
 function renderCartItem(cartArr) {
     const cartItemsHTML = cartArr
         .map(
-            (cartItem) => {
+            (cartItem, index) => {
                 if (cartItem.quantity === 0) {
                     return ""; // Skip rendering for items with quantity 0
                 }
-
                 return `
           <div class="card mb-3 p-2 bg-secondary">
             <div id="cardItem" class="d-flex justify-content-between align-items-center">
-              <img width="100" src="${cartItem.product.img}">
+              <span class="mx-2">${index + 1} </span><img width="100" src="${cartItem.product.img}">
               <div>
                 <div class="px-2">${cartItem.product.name}</div>
                 <div class="text-center mt-2">
@@ -163,17 +166,15 @@ function renderCartItem(cartArr) {
             }
         )
         .join("");
-
     const cartBillTotal = cartArr.reduce(
         (sum, cartItem) => sum + cartItem.product.price * cartItem.quantity,
         0
     );
-    count();
+
+    count(cartArr); // Pass the cartArr to the count function
     getEle("cartContent").innerHTML = cartItemsHTML;
     getEle("cartBillTotal").innerText = cartBillTotal + "$";
 }
-
-
 
 // CartBtn: Delete Item
 window.deleteCartItem = (id) => {
@@ -185,7 +186,7 @@ window.deleteCartItem = (id) => {
     setLocalStorage();
 };
 
-// CartBtn: decreaseQuantity
+// CartBtn: decrease
 window.decreaseQuantity = (id) => {
     const filteredItems = cart.findItemById(id, cartArr);
     const cartItem = filteredItems[0];
@@ -211,6 +212,7 @@ window.decreaseQuantity = (id) => {
     }
 };
 
+// CartBtn: increase
 window.increaseQuantity = (id) => {
     const filteredItems = cart.findItemById(id, cartArr);
     const cartItem = filteredItems[0];
@@ -221,7 +223,8 @@ window.increaseQuantity = (id) => {
         if (cartItem.quantity === 0) {
             // Remove the item from the cart
             cartArr = cartArr.filter((item) => item.product.id !== id);
-            console.log("Removed item:", cartItem.product.name);
+            console.log("Increase item:", cartItem.product.name);
+            setLocalStorage();
         }
         console.log("Updated quantity:", cartItem.quantity);
         renderCartItem(cartArr);
@@ -229,7 +232,6 @@ window.increaseQuantity = (id) => {
         count(); // Update the cart count in the UI
     }
 };
-
 
 // LocalStorage
 function setLocalStorage() {
@@ -254,10 +256,17 @@ function clearLocalStorage() {
     renderCartItem(cartArr);
 }
 
+// Count:
 function count() {
     var cartCount = cartArr.length;
     getEle('cartCount').innerText = cartCount;
     getEle('cartCountItem').innerText = cartCount;
+
+
+    const totalQuantity = cartArr.reduce((sum, cartItem) => sum + cartItem.quantity, 0);
+
+    getEle('cartCount').innerText = cartCount;
+    getEle('cartBillSubTotal').innerText = totalQuantity;
 }
 
 // Run count product in cart: 
