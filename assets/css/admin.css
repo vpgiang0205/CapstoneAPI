@@ -85,10 +85,10 @@ li, a, link, link:hover, a:hover {
     height: 7rem;
   }
   #cartModel .modal-content {
-    width: 50%;
+    width: 100%;
   }
   #cartModel #cardItem img {
-    width: 100%;
+    width: 40%;
   }
   #cartModel #cardItem .cardItemFooter {
     width: 100%;

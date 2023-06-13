@@ -68,7 +68,7 @@ getEle('selectType').addEventListener("change", async () => {
     if (value === "Type") {
         renderProduct()
     }
-    
+
     let result = await api.callApi("product", "GET", null)
     if (result.status == 200 && result.statusText === "OK") { // success
         let mangTimKiem = [];
@@ -122,12 +122,12 @@ window.btnAddToCart = async (value) => {
 function renderCartItem(cartArr) {
     const cartItemsHTML = cartArr.map(cartItem => `
         <div class="card mb-3 p-2 bg-secondary">
-            <div id="cardItem" class = "d-flex justify-content-between align-items-center flex-wrap ">
+            <div id="cardItem" class = "d-flex justify-content-between align-items-center">
             
             
             <img width= 100 src = "${cartItem.product.img}">    
                     <div >
-                        <div >${cartItem.product.name}</div>
+                        <div class="px-2">${cartItem.product.name}</div>
                         
                         <div class = "text-center mt-2">
                         <button onclick ="cartQuantityMinus(${cartItem.product.id})" class = "btn-danger miniBtn" ><i class="fa-solid fa-minus"></i></button>
@@ -149,17 +149,17 @@ function renderCartItem(cartArr) {
     getEle('cartContent').innerHTML = cartItemsHTML;
 }
 
-const findItemById = (id) => {
-    return cartArr = cartArr.filter((item) => item.product.id !== id);
-};
-
+// CartBtn: Delete Item
 window.deleteCartItem = (id) => {
-    let cartItem = findItemById(id);
-    console.log(cartItem)
+    cartArr = cart.findOtherItemById(id, cartArr);
+    console.log("Deleted cart item:", id);
+
+    count();
     renderCartItem(cartArr);
     setLocalStorage();
 };
 
+// CartBtn: MinusProduct
 window.cartQuantityMinus = (id) => {
     let cartItem = findItemById(id);
     if (cartItem) {
@@ -171,24 +171,22 @@ window.cartQuantityMinus = (id) => {
     renderCartItem(cartArr);
     setLocalStorage();
 };
+
 // LocalStorage
 function setLocalStorage() {
-    // Convert cartArr to string
     var dataString = JSON.stringify(cartArr);
-    // Set localStorage
     localStorage.setItem("cart", dataString);
 }
 
 function getLocalStorage() {
-    // Check condition
     if (localStorage.getItem("cart")) {
         var dataString = localStorage.getItem("cart");
-        // Convert string to cartArr
         cartArr = JSON.parse(dataString);
         renderCartItem(cartArr);
     }
 }
 
+// CartBtn: clear
 window.clearLocalStorage = clearLocalStorage;
 function clearLocalStorage() {
     localStorage.removeItem("cart");
@@ -198,11 +196,12 @@ function clearLocalStorage() {
 }
 
 function count() {
-    var cartArr = JSON.parse(localStorage.getItem('cart')) || [];
     var cartCount = cartArr.length;
     document.getElementById('cartCount').innerText = cartCount;
 }
 
+// Run count product in cart: 
 count();
 
+// Get localstorage item:
 getLocalStorage();

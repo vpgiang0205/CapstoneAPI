@@ -1,4 +1,4 @@
-class Product {
+export default class Product {
     constructor(id, name, price, img, screen, blackCamera, frontCamera, desc, type) {
         this.id = id;
         this.name = name;
@@ -15,5 +15,3 @@ class Product {
         return cartArr.filter((item) => item.product.id === id);
     }
 }
-
-export default Product;
