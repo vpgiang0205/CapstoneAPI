@@ -86,9 +86,9 @@ var renderProduct = (price) => {
           <td> <img src=${product.img}></td>
           <td>${product.desc}</td>
           <td>
-            <button id = "btnEdit" class="btn btn-danger" data-toggle="modal" data-target="#modelId" value="${
+            <button class="btn btn-danger" data-toggle="modal" data-target="#modelId" value="${
               product.id
-            }" onlick = "editProduct(${product.id}")>Edit</button>
+            }">Edit</button>
             <button class="btn btn-dark" value="" onclick="productDelete(${
               product.id
             })">Delete</button>
@@ -127,7 +127,9 @@ function search() {
             <td><img src="${product.img}"></td>
             <td>${product.desc}</td>
             <td>
-              <button class="btn btn-warning" data-toggle="modal" data-target="#modelId" onclick = "editProduct(${product.id})">Edit</button>
+              <button class="btn btn-danger" data-toggle="modal" data-target="#modelId" value="${
+                product.id
+              }" onclick = "editProduct(${product.id})">Edit</button>
               <button class="btn btn-dark" value="" onclick="productDelete(${
                 product.id
               })">Delete</button>
@@ -192,7 +194,9 @@ var renderSortedProducts = () => {
             <td> <img src=${product.img}></td>
             <td>${product.desc}</td>
             <td>
-                <button class="btn btn-warning" data-toggle="modal" data-target="#modelId" onclick = "editProduct(${product.id})">Edit</button>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#modelId" value="${
+                  product.id
+                }" onclick = "editProduct(${product.id})">Edit</button>
                 <button class="btn btn-dark" value="" onclick="productDelete(${
                   product.id
                 })">Delete</button>
@@ -202,19 +206,38 @@ var renderSortedProducts = () => {
 
   getEle("adminProductTbl").innerHTML = contentHTML;
 };
-// Run this function to render the table:
-renderProduct();
 //Edit product
 function editProduct(id) {
-  console.log(123);
-  var btnUpdate = `<button class='btn btn-sucess' onlick='updateProduct(${id})'>Update</button>`;
-  document.getElementsByClassName("modal-footer")[0].innerHTML = btnUpdate;
+  var btnUpdateProduct = `<button class='btn btn-success' onclick='updateProduct(${id})'>Update</button>`;
+  document.getElementsByClassName("modal-footer")[0].innerHTML =
+    btnUpdateProduct;
+  axios
+    .get(`https://64832aa2f2e76ae1b95c0f17.mockapi.io/product/${id}`)
+    .then((response) => {
+      getEle("name").value = product.name;
+      getEle("price").value = product.price;
+      getEle("screen").value = product.screen;
+      getEle("blackCamera").value = product.blackCamera;
+      getEle("frontCamera").value = product.frontCamera;
+      getEle("img").value = product.img;
+      getEle("desc").value = product.desc;
+      getEle("type").value = product.type;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 //Update product
-
-// getEle("btnEdit").addEventListener("click", function (event) {
-//   event.preventDefault();
-//   var product = getUserInput(false);
-// });
-
-//validation
+function updateProduct(id){
+  var product = getUserInput(id);
+  axios
+  .put(`https://64832aa2f2e76ae1b95c0f17.mockapi.io/product/${id}`)
+  .then((response) => {
+    renderProduct();
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}
+// Run this function to render the table:
+renderProduct();
