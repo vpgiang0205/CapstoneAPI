@@ -32,6 +32,7 @@ function getUserInput() {
 
 // Add
 function productAdd() {
+  
   var productData = getUserInput();
   axios
     .post("https://64832aa2f2e76ae1b95c0f17.mockapi.io/product", {
@@ -53,7 +54,13 @@ function productAdd() {
       console.log(error);
     });
 }
-
+getEle("modelAdd").addEventListener("click",function(){
+  var btnUpdateProduct = `<button type="button" class="btn btn-dark" data-dismiss="modal">
+  Close
+</button> <button class='btn btn-success' onclick='productAdd()'>Add</button>`;
+  document.getElementsByClassName("modal-footer")[0].innerHTML =
+    btnUpdateProduct;
+});
 // Delete
 function productDelete(id) {
   console.log(id);
@@ -201,7 +208,9 @@ var renderSortedProducts = () => {
 };
 //Edit product
 function editProduct(id) {
-  var btnUpdateProduct = `<button class='btn btn-success' onclick='updateProduct(${id})'>Update</button>`;
+  var btnUpdateProduct = ` <button type="button" class="btn btn-dark" data-dismiss="modal">
+  Close
+</button> <button class='btn btn-success' onclick='updateProduct(${id})'>Update</button>`;
   document.getElementsByClassName("modal-footer")[0].innerHTML =
     btnUpdateProduct;
   axios
@@ -224,14 +233,25 @@ function editProduct(id) {
 //Update product
 function updateProduct(id) {
   var product = getUserInput(id);
-  axios
-    .put(`https://64832aa2f2e76ae1b95c0f17.mockapi.io/product/${id}`)
-    .then((response) => {
-      renderProduct();
-    })
+  axios({
+    url: `https://64832aa2f2e76ae1b95c0f17.mockapi.io/product/${product.id}`,
+    method: "PUT",
+    data: product,
+  })
+  .then(function(){
+    renderProduct();
+    document.getElementsByClassName("close")[0].click();
+  })
     .catch((error) => {
       console.log(error);
     });
 }
 // Run this function to render the table:
 renderProduct();
+//reset modal
+$('#modelId').on('hidden.bs.modal', function (e) {
+
+  $('#modelId').find("input[type=text], textarea").val("");
+})
+//validation
+
