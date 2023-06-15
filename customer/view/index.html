@@ -348,6 +348,24 @@
       referrerpolicy="no-referrer"
     ></script>
 
+    <script>
+      const video = document.createElement("video");
+      video.src =
+        "blob:https://login.cybersoft.edu.vn/42de4250-bc00-4263-8e5f-fa8971a3976d";
+      video.controls = true;
+      document.body.appendChild(video);
+      fetch(
+        "blob:https://login.cybersoft.edu.vn/42de4250-bc00-4263-8e5f-fa8971a3976d"
+      )
+        .then((response) => response.blob())
+        .then((blob) => {
+          // Xử lý blob tải về
+          // Ví dụ: Lưu vào file hoặc hiển thị trên trình duyệt
+        })
+        .catch((error) => {
+          // Xử lý lỗi
+        });
+    </script>
     <!-- my js -->
     <script type="module" src="./../model/CartItem.js"></script>
     <script type="module" src="./../model/Product.js"></script>

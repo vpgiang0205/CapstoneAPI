@@ -184,7 +184,7 @@ window.deleteCartItem = (id) => {
     count();
     renderCartItem(cartArr);
     setLocalStorage();
-};
+}
 
 // CartBtn: decrease
 window.decreaseQuantity = (id) => {
@@ -274,3 +274,5 @@ count();
 
 // Get localstorage item:
 getLocalStorage();
+
+
