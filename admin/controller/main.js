@@ -86,12 +86,10 @@ var renderProduct = (price) => {
           <td> <img src=${product.img}></td>
           <td>${product.desc}</td>
           <td>
-            <button class="btn btn-danger" data-toggle="modal" data-target="#modelId" value="${
-              product.id
-            }">Edit</button>
-            <button class="btn btn-dark" value="" onclick="productDelete(${
-              product.id
-            })">Delete</button>
+            <button class="btn btn-danger" data-toggle="modal" data-target="#modelId" onclick="editProduct(${product.id
+          })">Edit</button>
+            <button class="btn btn-dark" value="" onclick="productDelete(${product.id
+          })">Delete</button>
           </td>
         </tr>`;
       }
@@ -127,12 +125,9 @@ function search() {
             <td><img src="${product.img}"></td>
             <td>${product.desc}</td>
             <td>
-              <button class="btn btn-danger" data-toggle="modal" data-target="#modelId" value="${
-                product.id
-              }" onclick = "editProduct(${product.id})">Edit</button>
-              <button class="btn btn-dark" value="" onclick="productDelete(${
-                product.id
-              })">Delete</button>
+              <button class="btn btn-danger" data-toggle="modal" data-target="#modelId" onclick = "editProduct(${product.id})">Edit</button>
+              <button class="btn btn-dark" value="" onclick="productDelete(${product.id
+            })">Delete</button>
             </td>
           </tr>`;
         }
@@ -194,12 +189,10 @@ var renderSortedProducts = () => {
             <td> <img src=${product.img}></td>
             <td>${product.desc}</td>
             <td>
-                <button class="btn btn-danger" data-toggle="modal" data-target="#modelId" value="${
-                  product.id
-                }" onclick = "editProduct(${product.id})">Edit</button>
-                <button class="btn btn-dark" value="" onclick="productDelete(${
-                  product.id
-                })">Delete</button>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#modelId" value="${product.id
+      }" onclick = "editProduct(${product.id})">Edit</button>
+                <button class="btn btn-dark" value="" onclick="productDelete(${product.id
+      })">Delete</button>
             </td>
         </tr>`;
   }
@@ -214,30 +207,31 @@ function editProduct(id) {
   axios
     .get(`https://64832aa2f2e76ae1b95c0f17.mockapi.io/product/${id}`)
     .then((response) => {
-      getEle("name").value = product.name;
-      getEle("price").value = product.price;
-      getEle("screen").value = product.screen;
-      getEle("blackCamera").value = product.blackCamera;
-      getEle("frontCamera").value = product.frontCamera;
-      getEle("img").value = product.img;
-      getEle("desc").value = product.desc;
-      getEle("type").value = product.type;
+
+      getEle("name").value = response.data.name;
+      getEle("price").value = response.data.price;
+      getEle("screen").value = response.data.screen;
+      getEle("blackCamera").value = response.data.blackCamera;
+      getEle("frontCamera").value = response.data.frontCamera;
+      getEle("img").value = response.data.img;
+      getEle("desc").value = response.data.desc;
+      getEle("type").value = response.data.type;
     })
     .catch((error) => {
       console.log(error);
     });
 }
 //Update product
-function updateProduct(id){
+function updateProduct(id) {
   var product = getUserInput(id);
   axios
-  .put(`https://64832aa2f2e76ae1b95c0f17.mockapi.io/product/${id}`)
-  .then((response) => {
-    renderProduct();
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+    .put(`https://64832aa2f2e76ae1b95c0f17.mockapi.io/product/${id}`)
+    .then((response) => {
+      renderProduct();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 // Run this function to render the table:
 renderProduct();
