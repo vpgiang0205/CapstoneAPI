@@ -7,10 +7,25 @@ const cart = new Cart();
 // GetEle:
 const getEle = (id) => document.getElementById(id)
 
+// -----------------------------------------------------------------------------------------------------------------------
+/** ProductPage: */
+
+// Call API get Product:
+function renderProduct() {
+    api.callApi("product", "GET", null)
+        .then((rs) => {
+            // run renderUI of the page
+            renderUI(rs.data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+};
+renderProduct()
+
 
 // RenderUI of the page
 function renderUI(data) {
-
     let content = "";
     if (data && data.length > 0) {
         data.forEach((product) => {
@@ -49,38 +64,32 @@ function renderUI(data) {
     }
 }
 
-// Render Product:
-function renderProduct() {
-    api.callApi("product", "GET", null)
-        .then((rs) => {
-            // run renderUI
-            renderUI(rs.data)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-};
-renderProduct()
-
-// Sort
+// Filter:
 getEle('selectType').addEventListener("change", async () => {
-    const value = getEle('selectType').value
-    if (value === "Type") {
+    const type = getEle('selectType').value
+    if (type.length == 0) {
         renderProduct()
-    }
-
-    let result = await api.callApi("product", "GET", null)
-    if (result.status == 200 && result.statusText === "OK") { // success
-        let mangTimKiem = [];
-        mangTimKiem = result.data.filter((product) => product.type === value)
-        renderUI(mangTimKiem)
+    } else {
+        let response = await api.callApi("product", "GET", null)
+        if (response.status == 200 && response.statusText === "OK") { // success
+            let FilterArr = [];
+            FilterArr = response.data.filter((product) => product.type == type)
+            console.log(FilterArr)
+            if (FilterArr.length == 0 && type.length > 0) {
+                console.log("rong")
+            }
+            renderUI(FilterArr)
+        }
     }
 })
 
+// -----------------------------------------------------------------------------------------------------------------
+/** CART */
 
-// Cart (Riêng phần này chú thích vietsub cho teammate dễ hiểu)
+// CartArr
 let cartArr = [];
-// Thêm sản phẩm vào giỏ
+
+// CartBtn: Add
 window.btnAddToCart = async (value) => {
     // Khi nhấn thêm, gọi API để lấy dữ liệu sản phẩm
     const phoneData = await api.callApi(`product/${value}`, 'GET', null);
@@ -119,34 +128,52 @@ window.btnAddToCart = async (value) => {
     renderCartItem(cartArr);
 };
 
+// Cart:Render
 function renderCartItem(cartArr) {
-    const cartItemsHTML = cartArr.map(cartItem => `
-        <div class="card mb-3 p-2 bg-secondary">
-            <div id="cardItem" class = "d-flex justify-content-between align-items-center">
-            
-            
-            <img width= 100 src = "${cartItem.product.img}">    
-                    <div >
-                        <div class="px-2">${cartItem.product.name}</div>
-                        
-                        <div class = "text-center mt-2">
-                        <button onclick ="cartQuantityMinus(${cartItem.product.id})" class = "btn-danger miniBtn" ><i class="fa-solid fa-minus"></i></button>
-                          ${cartItem.quantity}
-                        <button onclick ="cartQuantityPlus(${cartItem.product.id})" class = "btn-danger miniBtn" ><i class="fa-solid fa-plus"></i></button>
-                        </div>
-
-                    </div>
-                        
-                    <div class="text-center cardItemFooter">${cartItem.product.price}
-                          <div> <button onclick ="deleteCartItem(${cartItem.product.id})" class = "btn-danger mt-2 p-2" >
-                    remove</button></div>
-                    </div>
-              
+    const cartItemsHTML = cartArr
+        .map(
+            (cartItem, index) => {
+                if (cartItem.quantity === 0) {
+                    return ""; // Skip rendering for items with quantity 0
+                }
+                return `
+          <div class="card mb-3 p-2 bg-secondary">
+            <div id="cardItem" class="d-flex justify-content-between align-items-center">
+              <span class="mx-2">${index + 1} </span><img width="100" src="${cartItem.product.img}">
+              <div>
+                <div class="px-2">${cartItem.product.name}</div>
+                <div class="text-center mt-2">
+                  <button onclick="decreaseQuantity(${cartItem.product.id})" class="btn-danger miniBtn">
+                    <i class="fa-solid fa-minus"></i>
+                  </button>
+                  ${cartItem.quantity}
+                  <button onclick="increaseQuantity(${cartItem.product.id})" class="btn-danger miniBtn">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="text-center cardItemFooter">
+                ${cartItem.product.price * cartItem.quantity}$
+                <div>
+                  <button onclick="deleteCartItem(${cartItem.product.id})" class="btn-danger mt-2 p-2">
+                    remove
+                  </button>
+                </div>
+              </div>
             </div>
-        </div>
-    `).join("");
-    count();
-    getEle('cartContent').innerHTML = cartItemsHTML;
+          </div>
+        `;
+            }
+        )
+        .join("");
+    const cartBillTotal = cartArr.reduce(
+        (sum, cartItem) => sum + cartItem.product.price * cartItem.quantity,
+        0
+    );
+
+    count(cartArr); // Pass the cartArr to the count function
+    getEle("cartContent").innerHTML = cartItemsHTML;
+    getEle("cartBillTotal").innerText = cartBillTotal + "$";
 }
 
 // CartBtn: Delete Item
@@ -157,19 +184,53 @@ window.deleteCartItem = (id) => {
     count();
     renderCartItem(cartArr);
     setLocalStorage();
+}
+
+// CartBtn: decrease
+window.decreaseQuantity = (id) => {
+    const filteredItems = cart.findItemById(id, cartArr);
+    const cartItem = filteredItems[0];
+
+    if (cartItem) {
+        cartItem.quantity--; // Decrease the quantity by 1
+
+        if (cartItem.quantity === 0) {
+            // Remove the item from the cart
+            cartArr = cart.findOtherItemById(id, cartArr);
+            console.log("Deleted cart item:", id);
+
+            // Remove item from local storage
+            cartArr = cartArr.filter((item) => item.product.id !== id);
+            console.log("Removed item:", cartItem.product.name);
+            setLocalStorage(); // Update local storage with modified cartArr
+        }
+
+        console.log("Updated quantity:", cartItem.quantity);
+        renderCartItem(cartArr);
+        setLocalStorage(); // Update local storage with modified cartArr
+        count(); // Update the cart count in the UI
+    }
 };
 
-// CartBtn: MinusProduct
-window.cartQuantityMinus = (id) => {
-    let cartItem = findItemById(id);
+// CartBtn: increase
+window.increaseQuantity = (id) => {
+    const filteredItems = cart.findItemById(id, cartArr);
+    const cartItem = filteredItems[0];
+
     if (cartItem) {
-        cartItem.quantity--;
-        if (cartItem.quantity <= 0) {
-            cartArr.splice(cartArr.indexOf(cartItem), 1);
+        cartItem.quantity++; // Increase the quantity by 1
+
+        if (cartItem.quantity === 0) {
+            // Remove the item from the cart
+            cartArr = cartArr.filter((item) => item.product.id !== id);
+            console.log("Increase item:", cartItem.product.name);
+            setLocalStorage();
         }
+        console.log("Updated quantity:", cartItem.quantity);
+        renderCartItem(cartArr);
+        setLocalStorage(); // Update local storage with modified cartArr
+        count(); // Update the cart count in the UI
     }
-    renderCartItem(cartArr);
-    setLocalStorage();
 };
 
 // LocalStorage
@@ -195,9 +256,17 @@ function clearLocalStorage() {
     renderCartItem(cartArr);
 }
 
+// Count:
 function count() {
     var cartCount = cartArr.length;
-    document.getElementById('cartCount').innerText = cartCount;
+    getEle('cartCount').innerText = cartCount;
+    getEle('cartCountItem').innerText = cartCount;
+
+
+    const totalQuantity = cartArr.reduce((sum, cartItem) => sum + cartItem.quantity, 0);
+
+    getEle('cartCount').innerText = cartCount;
+    getEle('cartBillSubTotal').innerText = totalQuantity;
 }
 
 // Run count product in cart: 
@@ -205,3 +274,5 @@ count();
 
 // Get localstorage item:
 getLocalStorage();
+
+

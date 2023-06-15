@@ -36,11 +36,11 @@
     <link rel="stylesheet" href="../../assets/css/customer.css" />
   </head>
   <body>
-    <div class="landingpage">
-      <header class="container">
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="customer">
+      <header id="header" class="container">
+        <nav class="navbar navbar-expand navbar-dark fixed-top">
           <div>
-            <a class="navbar-brand m-2" href="../../index.html">
+            <a class="navbar-brand" href="../../index.html">
               <i class="fa-lg fa-solid fa-robot m-3"></i>CyberPhone
             </a>
           </div>
@@ -58,47 +58,34 @@
           </button>
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div
-              class="navbar-nav d-flex justify-content-between w-100 px-5 py-2"
-            >
-              <li class="nav-item text-center">
+            <ul class="navbar-nav w-100">
+              <li class="nav-item">
                 <a
-                  class="nav-link active"
+                  class="nav-link active text-center"
                   href="../../admin/view/index.html"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
                 >
-                  <div>
-                    <i class="fa-solid fa-xl fa-user-gear"></i>
-                  </div>
+                  <div><i class="fa-solid fa-xl fa-user-gear"></i></div>
                   Admin Portal
                 </a>
               </li>
-
-              <ul>
-                <li class="nav-item text-center">
-                  <a
-                    style="cursor: pointer"
-                    class="nav-link js-toggle-cart active"
-                    role="button"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                    data-toggle="modal"
-                    data-target="#cartModel"
-                  >
-                    <div>
-                      <i class="fa-solid fa-xl fa-shopping-cart"></i>
-                      <span
-                        class="badge rounded-pill badge-notification bg-light text-dark"
-                        id="cartCount"
-                      ></span>
-                    </div>
-                    Cart
-                  </a>
-                </li>
-              </ul>
-            </div>
+              <li class="nav-item ml-auto">
+                <a
+                  class="nav-link js-toggle-cart active"
+                  href="#"
+                  data-toggle="modal"
+                  data-target="#cartModel"
+                >
+                  <div>
+                    <i class="fa-solid fa-xl fa-shopping-cart"></i>
+                    <span
+                      class="badge rounded-pill badge-notification bg-light text-dark"
+                      id="cartCount"
+                    ></span>
+                  </div>
+                  Cart
+                </a>
+              </li>
+            </ul>
           </div>
         </nav>
       </header>
@@ -149,9 +136,15 @@
             <div class="modal-content bg-dark text-white">
               <div class="modal-header">
                 <h5 class="modal-title">Shopping Cart</h5>
+                <div class="ml-2 modal-title">
+                  <span
+                    class="badge rounded-pill badge-notification bg-light text-dark"
+                    id="cartCountItem"
+                  ></span>
+                </div>
                 <button
                   type="button"
-                  class="close"
+                  class="close text-light"
                   data-dismiss="modal"
                   aria-label="Close"
                 >
@@ -163,24 +156,22 @@
                   <div id="cartContent"></div>
 
                   <!-- Cart Bill -->
-                  <div
-                    class="cart__Bill form-group d-flex flex-column"
-                  >
+                  <div class="cart__Bill form-group d-flex flex-column">
                     <div class="d-flex justify-content-between">
-                      <label for="">Subtotal:</label>
-                      <p for="">0</p>
+                      <label for="">Total Quantity:</label>
+                      <p id="cartBillSubTotal" for="">0</p>
                     </div>
                     <div class="d-flex justify-content-between">
                       <label for="">Shipping (estimated):</label>
-                      <p for="">0</p>
+                      <p id="cartBill" for="">0</p>
                     </div>
                     <div class="d-flex justify-content-between">
                       <label for="">Tax (estimated):</label>
-                      <p for="">0</p>
+                      <p id="cartBill" for="">0</p>
                     </div>
                     <div class="d-flex justify-content-between">
                       <label for="">Total:</label>
-                      <p for="">0</p>
+                      <p id="cartBillTotal" for="">0</p>
                     </div>
                   </div>
                 </div>
@@ -189,9 +180,9 @@
                 <button
                   type="button"
                   onclick="clearLocalStorage()"
-                  class="btn btn-info"
+                  class="btn btn-danger"
                 >
-                  Clear
+                  Purchase
                 </button>
                 <button
                   type="button"
@@ -200,7 +191,6 @@
                 >
                   Close
                 </button>
-                <button type="button" class="btn btn-primary">Save</button>
               </div>
             </div>
           </div>
@@ -217,7 +207,7 @@
                   id="selectType"
                   value=""
                 >
-                  <option value="Type">Type</option>
+                  <option value="">All</option>
                   <option value="Apple">Apple</option>
                   <option value="Samsung">Samsung</option>
                 </select>
@@ -358,6 +348,24 @@
       referrerpolicy="no-referrer"
     ></script>
 
+    <script>
+      const video = document.createElement("video");
+      video.src =
+        "blob:https://login.cybersoft.edu.vn/42de4250-bc00-4263-8e5f-fa8971a3976d";
+      video.controls = true;
+      document.body.appendChild(video);
+      fetch(
+        "blob:https://login.cybersoft.edu.vn/42de4250-bc00-4263-8e5f-fa8971a3976d"
+      )
+        .then((response) => response.blob())
+        .then((blob) => {
+          // Xử lý blob tải về
+          // Ví dụ: Lưu vào file hoặc hiển thị trên trình duyệt
+        })
+        .catch((error) => {
+          // Xử lý lỗi
+        });
+    </script>
     <!-- my js -->
     <script type="module" src="./../model/CartItem.js"></script>
     <script type="module" src="./../model/Product.js"></script>
