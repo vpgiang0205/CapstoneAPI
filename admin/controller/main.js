@@ -86,9 +86,7 @@ var renderProduct = (price) => {
           <td> <img src=${product.img}></td>
           <td>${product.desc}</td>
           <td>
-            <button class="btn btn-danger" data-toggle="modal" data-target="#modelId" value="${
-              product.id
-            }">Edit</button>
+            <button class="btn btn-danger" data-toggle="modal" data-target="#modelId" onclick = "editProduct(${product.id})">Edit</button>
             <button class="btn btn-dark" value="" onclick="productDelete(${
               product.id
             })">Delete</button>
@@ -208,12 +206,14 @@ var renderSortedProducts = () => {
 };
 //Edit product
 function editProduct(id) {
+  console.log(id)
   var btnUpdateProduct = `<button class='btn btn-success' onclick='updateProduct(${id})'>Update</button>`;
   document.getElementsByClassName("modal-footer")[0].innerHTML =
     btnUpdateProduct;
   axios
     .get(`https://64832aa2f2e76ae1b95c0f17.mockapi.io/product/${id}`)
     .then((response) => {
+      var product = response.data
       getEle("name").value = product.name;
       getEle("price").value = product.price;
       getEle("screen").value = product.screen;
