@@ -6,8 +6,9 @@ export default class Cart {
         this.arr.push(data)
     }
 
-    findItemById = (id, cartArr) => {
+    findItemById = (id,cartArr) => {
         return cartArr = cartArr.filter((item) => item.product.id == id);
+        
     };
 
     findOtherItemById = (id, cartArr) => {
