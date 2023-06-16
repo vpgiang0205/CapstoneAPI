@@ -100,7 +100,7 @@ body {
 }
 
 section {
-  margin-top: 15rem;
+  margin-top: 5rem;
 }
 
 .navbar-nav i {
@@ -124,11 +124,6 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-}
-
-#banner {
-  height: 100vh;
-  padding: 3em;
 }
 
 .product {
